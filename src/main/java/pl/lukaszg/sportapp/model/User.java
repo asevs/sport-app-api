@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.management.relation.Role;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -65,5 +64,5 @@ public class User {
     @OneToMany(mappedBy = "ownerUser")
     @JsonBackReference(value = "owner-room")
     private List<Room> ownerRooms;
-}
+    }
 

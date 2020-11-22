@@ -1,11 +1,15 @@
+package pl.lukaszg.sportapp.model;
+
 import lombok.Data;
-import pl.lukaszg.sportapp.model.User;
+import lombok.NoArgsConstructor;
+
 
 import javax.persistence.*;
 
 @Entity
 @Data
 @Table(name = "place")
+@NoArgsConstructor
 public class Place {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

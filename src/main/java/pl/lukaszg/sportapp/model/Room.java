@@ -1,8 +1,10 @@
 package pl.lukaszg.sportapp.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
@@ -12,6 +14,8 @@ import java.util.List;
 @Entity
 @Data
 @Table(name = "room")
+@NoArgsConstructor
+
 public class Room {
 
     @Enumerated(EnumType.STRING)
@@ -50,11 +54,9 @@ public class Room {
     @JsonIgnore
     @JsonManagedReference(value = "users-rooms")
     private List<User> users;
-
-
-//    @ElementCollection
-//    @MapKeyJoinColumn(name = "user_id")
-//    private Map<User, Integer> goals;
+    @OneToOne
+    @JsonBackReference(value = "stats")
+    private Stats stats;
 
 
 }
