@@ -1,0 +1,3 @@
+package pl.lukaszg.sportapp.model;
+
+public enum Discipline {FOOTBALL, BASKETBALL, HANDBALL, VOLEYBALL, TABLE_TENNIS, TENNIS, SQUASH, BEACH_VOLEYBALL, BEACH_SOCCER}
