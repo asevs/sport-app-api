@@ -1,8 +1,8 @@
 package pl.lukaszg.sportapp.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -11,8 +11,7 @@ import java.util.Set;
 
 @Data
 @Entity
-@NoArgsConstructor
-@Table(name = "user")
+@Table(name = "users")
 public class User {
 
     @Id
@@ -21,18 +20,20 @@ public class User {
     private long id;
     @Column(name = "user_active")
     private Boolean active;
-    @Column(name = "user_goals")
-    private int goals;
-    @Column(name = "user_assists")
-    private int assists;
+    @Column(name ="enabled")
+    private boolean enabled;
+    @Column(name ="username")
+    private String username;
     @Column(name = "user_principal_id")
     private String principalId;
     @Column(name = "user_email")
     private String email;
-    @Column(name = "user_password")
+    @Column(name = "password")
     private String password;
     @Column(name = "user_full_name")
     private String fullName;
+    @Transient
+    private String newPassword;
     @Column(name = "user_photo")
     private String photo;
     @Column(name = "user_created_user_date")
@@ -62,5 +63,6 @@ public class User {
     @OneToMany(mappedBy = "ownerUser")
     @JsonBackReference(value = "owner-room")
     private List<Room> ownerRooms;
-    }
+
+}
 

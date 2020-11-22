@@ -7,7 +7,7 @@ import java.util.List;
 
 @Entity
 @Data
-@Table(name = "chat")
+@Table(name = "chats")
 public class Chat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,4 +15,6 @@ public class Chat {
     private long id;
     @OneToMany(mappedBy = "chat")
     private List<ChatMessage> messages;
+    @OneToOne
+    private Room room;
 }

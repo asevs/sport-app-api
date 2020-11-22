@@ -1,6 +1,5 @@
 package pl.lukaszg.sportapp.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,22 +16,25 @@ public class Stats {
     @Column(name = "stats_id")
     Long id;
     @ElementCollection
+    @OneToMany(mappedBy = "statsOwner")
     @MapKeyJoinColumn(name = "user_id")
-    private Map<User, Integer> minutesPlayed;
+    private Map<Integer, User> minutesPlayed;
     @ElementCollection
+    @OneToMany(mappedBy = "statsOwner")
     @MapKeyJoinColumn(name = "user_id")
-    private Map<User, Integer> goals;
+    private Map<Integer, User> goals;
     @ElementCollection
+    @OneToMany(mappedBy = "statsOwner")
     @MapKeyJoinColumn(name = "user_id")
-    private Map<User, Integer> assists;
+    private Map<Integer, User> assists;
     @ElementCollection
+    @OneToMany(mappedBy = "statsOwner")
     @MapKeyJoinColumn(name = "user_id")
-    private Map<User, Integer> yellowCards;
+    private Map<Integer, User> yellowCards;
     @ElementCollection
+    @OneToMany(mappedBy = "stats_")
     @MapKeyJoinColumn(name = "user_id")
-    private Map<User, Integer> redCards;
-    @OneToOne(mappedBy = "stats")
-    @JsonManagedReference(value = "stats")
-    private Room room;
+    private Map<Integer, User> redCards;
+
 
 }
