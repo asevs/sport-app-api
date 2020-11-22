@@ -15,24 +15,19 @@ public class Stats {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "stats_id")
     Long id;
-    @ElementCollection
-    @OneToMany(mappedBy = "statsOwner")
+    @OneToMany
     @MapKeyJoinColumn(name = "user_id")
     private Map<Integer, User> minutesPlayed;
-    @ElementCollection
-    @OneToMany(mappedBy = "statsOwner")
+    @OneToMany
     @MapKeyJoinColumn(name = "user_id")
     private Map<Integer, User> goals;
-    @ElementCollection
-    @OneToMany(mappedBy = "statsOwner")
+    @OneToMany
     @MapKeyJoinColumn(name = "user_id")
     private Map<Integer, User> assists;
-    @ElementCollection
-    @OneToMany(mappedBy = "statsOwner")
+    @OneToMany
     @MapKeyJoinColumn(name = "user_id")
     private Map<Integer, User> yellowCards;
-    @ElementCollection
-    @OneToMany(mappedBy = "stats_")
+    @OneToMany
     @MapKeyJoinColumn(name = "user_id")
     private Map<Integer, User> redCards;
 

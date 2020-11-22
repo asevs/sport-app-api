@@ -1,7 +1,6 @@
 package pl.lukaszg.sportapp.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -20,9 +19,9 @@ public class User {
     private long id;
     @Column(name = "user_active")
     private Boolean active;
-    @Column(name ="enabled")
+    @Column(name = "enabled")
     private boolean enabled;
-    @Column(name ="username")
+    @Column(name = "username")
     private String username;
     @Column(name = "user_principal_id")
     private String principalId;
@@ -63,6 +62,9 @@ public class User {
     @OneToMany(mappedBy = "ownerUser")
     @JsonBackReference(value = "owner-room")
     private List<Room> ownerRooms;
+
+    @OneToOne
+    private Stats stats;
 
 }
 

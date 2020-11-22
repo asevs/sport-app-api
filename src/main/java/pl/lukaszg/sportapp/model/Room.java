@@ -55,7 +55,8 @@ public class Room {
     private List<User> users;
     @OneToOne(mappedBy = "room")
     private Chat chat;
-
+    @OneToOne
+    private Stats stats;
 
 
 }
