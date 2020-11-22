@@ -33,8 +33,6 @@ public class User {
     private String password;
     @Column(name = "user_full_name")
     private String fullName;
-    @Transient
-    private String newPassword;
     @Column(name = "user_photo")
     private String photo;
     @Column(name = "user_created_user_date")

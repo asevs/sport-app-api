@@ -30,7 +30,7 @@ public class Room {
     private int scoreTeamFirst;
     @Column(name = "room_score_team_second")
     private int scoreTeamSecond;
-    @ManyToOne(cascade = CascadeType.ALL, targetEntity = Skill.class)
+    @OneToOne(cascade = CascadeType.MERGE, targetEntity = Skill.class)
     @JoinColumn(name = "room_level_skill")
     private Skill levelSkill;
     @Column(name = "room_created_date")
@@ -43,20 +43,22 @@ public class Room {
     @JsonManagedReference(value = "owner-room")
     @JsonIgnore
     private User ownerUser;
-    @ManyToOne(cascade = CascadeType.ALL, targetEntity = Place.class)
+    @OneToOne(cascade = CascadeType.MERGE, targetEntity = Place.class)
     private Place place;
-    @ManyToOne(cascade = CascadeType.ALL, targetEntity = Team.class)
+    @OneToOne(cascade = CascadeType.MERGE, targetEntity = Team.class)
     private Team teamSecond;
-    @ManyToOne(cascade = CascadeType.ALL, targetEntity = Team.class)
+    @OneToOne(cascade = CascadeType.MERGE, targetEntity = Team.class)
     private Team teamFirst;
     @ToString.Exclude
-    @ManyToMany(mappedBy = "rooms", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "rooms", cascade = CascadeType.MERGE)
     @JsonIgnore
     @JsonManagedReference(value = "users-rooms")
     private List<User> users;
     @OneToOne
     @JsonBackReference(value = "stats")
     private Stats stats;
+    @OneToOne(cascade = CascadeType.MERGE, targetEntity = Chat.class)
+    private Chat chat;
 
 
 }
