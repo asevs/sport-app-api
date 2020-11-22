@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.management.relation.Role;
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -64,4 +65,5 @@ public class User {
     @OneToMany(mappedBy = "ownerUser")
     @JsonBackReference(value = "owner-room")
     private List<Room> ownerRooms;
+}
 
