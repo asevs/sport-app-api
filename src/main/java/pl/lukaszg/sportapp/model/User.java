@@ -50,21 +50,19 @@ public class User {
     @OneToOne
     @JsonBackReference(value = "user-team")
     private Team myTeam;
-
     @ManyToMany(cascade = CascadeType.MERGE)
     @JsonBackReference(value = "users-team")
     private List<Team> teams;
-
     @ManyToMany
     @JsonBackReference(value = "users-rooms")
     private List<Room> rooms;
-
     @OneToMany(mappedBy = "ownerUser")
     @JsonBackReference(value = "owner-room")
     private List<Room> ownerRooms;
-
     @OneToOne
     private Stats stats;
+    @OneToOne
+    private User user;
 
 }
 
