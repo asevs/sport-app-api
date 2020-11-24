@@ -19,11 +19,21 @@ public class UserController {
         return userService.findAll();
     }
 
+    @GetMapping("/user/{id}")
+    public User getAllUsers(@PathVariable("id") Long id) {
+        return userService.findUserById(id);
+    }
+
     @PostMapping("/login")
     public void login(@RequestBody LoginCredentials credentials) {
     }
 
-    @RequestMapping(value = "/registers", consumes = "application/json", produces = "application/json")
+    @PatchMapping("/user/changePassword/{id}")
+    public String changePassword(@PathVariable("id") Long id, @RequestBody LoginCredentials credentials) {
+        return userService.changePassword(id, credentials);
+    }
+
+    @PostMapping(value = "/registers", consumes = "application/json", produces = "application/json")
     public String registerUser(@RequestBody User user) {
         return userService.registerUser(user);
     }

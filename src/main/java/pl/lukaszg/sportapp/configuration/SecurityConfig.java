@@ -56,7 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/room/**").permitAll()
                 .antMatchers("/registers/**").permitAll()
                 .antMatchers("/users").permitAll()
-                .anyRequest().authenticated()
+               // .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()

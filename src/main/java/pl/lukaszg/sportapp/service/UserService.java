@@ -3,7 +3,9 @@ package pl.lukaszg.sportapp.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.lukaszg.sportapp.configuration.LoginCredentials;
 import pl.lukaszg.sportapp.model.*;
+import pl.lukaszg.sportapp.service.exceptions.ItemNotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,7 +20,7 @@ public class UserService {
     TeamService teamService;
     @Autowired
     RoomService roomService;
-    BCryptPasswordEncoder bcrypt;
+    BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
 
     public List<User> findAll() {
         return userRepository.findAll();
@@ -37,83 +39,77 @@ public class UserService {
     }
 
     // szukanie usera by id
-    public Optional<User> findUserById(Long id) {
-        if (id != null && id > 0) return userRepository.findById(id);
-        else return Optional.empty();
+    public User findUserById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new ItemNotFoundException("Could not find user: " + id));
     }
 
-    //zmiana hasła
-    public String changePassword(Long id, String oldPassword, String newPassword) {
-        Optional<User> user = findUserById(id);
-        if (user.isPresent()) {
-            if (bcrypt.matches(oldPassword, user.get().getPassword())) {
-                user.get().setPassword(bcrypt.encode(newPassword));
-                userRepository.save(user.get());
-                return "changed password";
-            }
-            return "incorrect old password";
-        } else return "No user in db";
+    //zmiana hasłaz
+    public String changePassword(Long id, LoginCredentials credentials) {
+        User user = findUserById(id);
+        if (bcrypt.matches(credentials.getOldPassword(), user.getPassword())) {
+            user.setPassword(bcrypt.encode(credentials.getNewPassword()));
+            userRepository.save(user);
+            return "changed password";
+        }
+        return "incorrect old password";
     }
 
     // zmiana profilu
     public String changeProfile(Long id, User user) {
-        if (id == user.getId() && findUserById(id).isPresent()) {
+        if (id == user.getId() && findUserById(id).getId() == user.getId()) {
             userRepository.save(user);
             return "updated";
         } else return "id or user is incorrect";
     }
 
     // dodanie usera do room
-    public String addUserToRoomById(Long teamId, Long userId) {
-        Optional<Room> room = roomService.findRoomById(teamId);
-        Optional<User> user = findUserById(userId);
+    public String addUserToRoomById(Long roomId, Long userId) {
+        Optional<Room> room = roomService.findRoomById(roomId);
+        User user = findUserById(userId);
 
-        if (room.isPresent() && user.isPresent()) {
-            if (room.get().getUsers().size() < room.get().getSlots()) {
-                room.get().getUsers().add(user.get());
-                return "added user";
-            } else return "max users";
-        } else return "user or team is empty";
+        if (room.get().getUsers().size() < room.get().getSlots()) {
+            List<Room> rooms = user.getRooms();
+            rooms.add(room.get());
+            user.setRooms(rooms);
+            userRepository.save(user);
+            return "added user";
+        } else return "max users";
     }
 
     // dodanie usera do team.
     public String addUserToTeamById(Long teamId, Long userId) {
         Optional<Team> team = teamService.findTeamById(teamId);
-        Optional<User> user = findUserById(userId);
+        User user = findUserById(userId);
+        if (team.get().getSlots() > team.get().getUsers().size()) {
+            List<Team> teams = user.getTeams();
+            teams.add(team.get());
+            user.setTeams(teams);
+            userRepository.save(user);
+            return "added user";
+        } else return "max users";
 
-        if (team.isPresent() && user.isPresent()) {
-            if (team.get().getSlots() > team.get().getUsers().size()) {
-                List<Team> teams = user.get().getTeams();
-                teams.add(team.get());
-                user.get().setTeams(teams);
-                userRepository.save(user.get());
-                return "added user";
-            } else return "max users";
-        } else return "user or team is empty";
     }
 
     //usunięcie usera z team
     public String deleteUserFromTeamById(Long teamId, Long userId) {
         Optional<Team> team = teamService.findTeamById(teamId);
-        Optional<User> user = findUserById(userId);
-
-        if (team.isPresent() && user.isPresent()) {
-            user.get().getTeams().remove(team.get());
-            userRepository.save(user.get());
-            return "deleted user";
-        } else return "user or team is empty";
+        User user = findUserById(userId);
+        List<Team> teams = user.getTeams();
+        teams.remove(team.get());
+        user.setTeams(teams);
+        userRepository.save(user);
+        return "deleted user";
     }
 
     //usunięcie usera z room
     public String deleteUserFromRoomById(Long roomId, Long userId) {
         Optional<Room> room = roomService.findRoomById(roomId);
-        Optional<User> user = findUserById(userId);
-
-        if (room.isPresent() && user.isPresent()) {
-            room.get().getUsers().remove(user.get());
-            roomService.updateRoom(room);
-            return "deleted user";
-        } else return "user or room is empty";
+        User user = findUserById(userId);
+        List<Room> rooms = user.getRooms();
+        rooms.remove(room.get());
+        user.setRooms(rooms);
+        userRepository.save(user);
+        return "deleted user";
     }
     //TODO  dodanie usera z google auth
 
