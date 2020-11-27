@@ -43,6 +43,12 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new ItemNotFoundException("Could not find user: " + id));
     }
 
+    // usuniecie usera by id
+    public String deleteUserById(Long id) {
+        userRepository.deleteById(id);
+        return "done";
+    }
+
     //zmiana hasłaz
     public String changePassword(Long id, LoginCredentials credentials) {
         User user = findUserById(id);
@@ -63,7 +69,7 @@ public class UserService {
     }
 
     // dodanie usera do room
-    public String addUserToRoomById(Long roomId, Long userId) {
+    public String addUserToRoomById(Long userId, Long roomId) {
         Optional<Room> room = roomService.findRoomById(roomId);
         User user = findUserById(userId);
 
@@ -77,7 +83,7 @@ public class UserService {
     }
 
     // dodanie usera do team.
-    public String addUserToTeamById(Long teamId, Long userId) {
+    public String addUserToTeamById(Long userId, Long teamId) {
         Optional<Team> team = teamService.findTeamById(teamId);
         User user = findUserById(userId);
         if (team.get().getSlots() > team.get().getUsers().size()) {
@@ -91,7 +97,7 @@ public class UserService {
     }
 
     //usunięcie usera z team
-    public String deleteUserFromTeamById(Long teamId, Long userId) {
+    public String deleteUserFromTeamById(Long userId, Long teamId) {
         Optional<Team> team = teamService.findTeamById(teamId);
         User user = findUserById(userId);
         List<Team> teams = user.getTeams();
@@ -102,7 +108,7 @@ public class UserService {
     }
 
     //usunięcie usera z room
-    public String deleteUserFromRoomById(Long roomId, Long userId) {
+    public String deleteUserFromRoomById(Long userId, Long roomId) {
         Optional<Room> room = roomService.findRoomById(roomId);
         User user = findUserById(userId);
         List<Room> rooms = user.getRooms();
