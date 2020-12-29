@@ -1,4 +1,4 @@
 package pl.lukaszg.sportapp.model;
 
-public enum NotificationType { TEAM_INVITE, MATCH_INVITE, MATCH_RESULT,
+public enum NotificationType { TEAM_INVITE, ROOM_INVITE, MATCH_RESULT,
 }

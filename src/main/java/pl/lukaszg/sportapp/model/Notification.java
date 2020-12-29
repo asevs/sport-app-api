@@ -15,7 +15,7 @@ public class Notification {
     @Column(name = "notification_id")
     private long id;
     @Column(name = "created_date")
-    private Date createdDate;
+    private LocalDateTime createdDate;
     @Column(name = "is_read")
     private boolean isRead;
     @Column(name = "read_date")

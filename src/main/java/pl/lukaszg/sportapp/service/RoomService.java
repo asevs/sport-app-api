@@ -2,12 +2,10 @@ package pl.lukaszg.sportapp.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.lukaszg.sportapp.model.Place;
-import pl.lukaszg.sportapp.model.Room;
-import pl.lukaszg.sportapp.model.RoomRepository;
-import pl.lukaszg.sportapp.model.User;
+import pl.lukaszg.sportapp.model.*;
 import pl.lukaszg.sportapp.service.exceptions.ItemNotFoundException;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -15,6 +13,7 @@ import java.util.List;
 @Service("roomService")
 public class RoomService {
 
+    private static final NotificationType ROOM_INVITE = NotificationType.ROOM_INVITE;
     @Autowired
     RoomRepository roomRepository;
     @Autowired
@@ -50,7 +49,17 @@ public class RoomService {
             return "updated";
         } else return "you haven't editing roles";
     }
-    // 3. wysłanie zaproszenia
+
+    // 3. wysłanie zaproszenia do roomu
+    public String sendInvite(Long userId, Long roomId) {
+        List<User> users = findRoomById(roomId).getInvitedUsers();
+        Room room = findRoomById(roomId);
+        users.add(userService.findUserById(userId));
+        room.setInvitedUsers(users);
+        roomRepository.save(room);
+        createNotification(userId, ROOM_INVITE);
+        return "sent invite";
+    }
 
     // 4. anulowanie zaproszenia
 
@@ -82,4 +91,12 @@ public class RoomService {
     public Room findRoomById(Long id) {
         return roomRepository.findById(id).orElseThrow(() -> new ItemNotFoundException("Could not find room: " + id));
     }
+
+    // 13. stworzenie powiadomienia
+    public void createNotification(Long userId, NotificationType notificationType) {
+        Notification notification = new Notification();
+        notification.setType(notificationType);
+        notification.setCreatedDate(LocalDateTime.now());
+    }
+
 }
