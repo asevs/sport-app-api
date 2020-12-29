@@ -63,6 +63,9 @@ public class User {
     private Stats stats;
     @OneToOne
     private User user;
+    @OneToMany
+    private List<Notification> notifications;
+
 
 }
 

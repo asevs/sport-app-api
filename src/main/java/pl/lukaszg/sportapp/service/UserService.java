@@ -17,6 +17,8 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
     @Autowired
+    NotificationRepository notificationRepository;
+    @Autowired
     TeamService teamService;
     @Autowired
     RoomService roomService;
@@ -26,16 +28,21 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    //TODO  dodanie usera z google auth
+
+
     //Sprawdzamy czy user znajduje się w bazie. Jeżeli nie to tworzymy usera i zwracamy done. Jeżeli istnieje to zwracamy busy
     public String registerUser(User user) {
         if (userRepository.findByUsername(user.getUsername())) {
+            return "username is busy";
+        } else {
             String password = user.getPassword();
             user.setPassword(bcrypt.encode(password));
             user.setCreatedUserDate(LocalDateTime.now());
             user.setLoginType(UserLoginType.BASIC);
             userRepository.save(user);
             return "done";
-        } else return "username is busy ";
+        }
     }
 
     // szukanie usera by id
@@ -49,7 +56,7 @@ public class UserService {
         return "done";
     }
 
-    //zmiana hasłaz
+    //zmiana hasła
     public String changePassword(Long id, LoginCredentials credentials) {
         User user = findUserById(id);
         if (bcrypt.matches(credentials.getOldPassword(), user.getPassword())) {
@@ -70,12 +77,12 @@ public class UserService {
 
     // dodanie usera do room
     public String addUserToRoomById(Long userId, Long roomId) {
-        Optional<Room> room = roomService.findRoomById(roomId);
+        Room room = roomService.findRoomById(roomId);
         User user = findUserById(userId);
 
-        if (room.get().getUsers().size() < room.get().getSlots()) {
+        if (room.getUsers().size() < room.getSlots()) {
             List<Room> rooms = user.getRooms();
-            rooms.add(room.get());
+            rooms.add(room);
             user.setRooms(rooms);
             userRepository.save(user);
             return "added user";
@@ -109,19 +116,26 @@ public class UserService {
 
     //usunięcie usera z room
     public String deleteUserFromRoomById(Long userId, Long roomId) {
-        Optional<Room> room = roomService.findRoomById(roomId);
+        Room room = roomService.findRoomById(roomId);
         User user = findUserById(userId);
         List<Room> rooms = user.getRooms();
-        rooms.remove(room.get());
+        rooms.remove(room);
         user.setRooms(rooms);
         userRepository.save(user);
         return "deleted user";
     }
-    //TODO  dodanie usera z google auth
 
-    //TODO  Odczytanie powiadomienia
+    // Odczytanie powiadomienia
 
-    private String readNotofication(Long notificationId, Long userId) {
-        return "read";
+    public String readNotification(Long notificationId) {
+        Optional<Notification> notification = notificationRepository.findById(notificationId);
+        if (notification.isPresent()) {
+            notification.get().setRead(true);
+            notification.get().setReadDate(LocalDateTime.now());
+            notificationRepository.save(notification.get());
+            return "read";
+        } else {
+            return "incorrect id";
+        }
     }
 }

@@ -1,9 +1,11 @@
 package pl.lukaszg.sportapp.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -27,5 +29,8 @@ public class Place {
     @ManyToOne(cascade = CascadeType.ALL, targetEntity = User.class)
     @JoinColumn(name = "place_manager")
     private User manager;
+    @OneToMany(mappedBy = "place")
+    @JsonBackReference(value = "place-room")
+    private List<Room> rooms;
 
 }

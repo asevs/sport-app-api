@@ -42,7 +42,9 @@ public class Room {
     @JsonManagedReference(value = "owner-room")
     @JsonIgnore
     private User ownerUser;
-    @OneToOne(cascade = CascadeType.ALL, targetEntity = Place.class)
+    @ManyToOne
+    @JsonManagedReference(value = "place-room")
+    @JsonIgnore
     private Place place;
     @OneToOne(cascade = CascadeType.ALL, targetEntity = Team.class)
     private Team teamSecond;
@@ -57,6 +59,8 @@ public class Room {
     private Chat chat;
     @OneToOne
     private Stats stats;
+    @OneToMany
+    private List<User> invitedUsers;
 
 
 }

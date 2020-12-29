@@ -8,7 +8,8 @@ import pl.lukaszg.sportapp.service.UserService;
 
 import java.util.List;
 
-@RestController("/users")
+
+@RestController("api/users")
 public class UserController {
 
     @Autowired
@@ -34,28 +35,35 @@ public class UserController {
         return userService.deleteUserById(id);
     }
 
-    @PutMapping(value = "/{userId}/teams/{teamId}", produces = "application/json")
-    public String deleteUserFromTeamById(@PathVariable("userId") Long userId, @PathVariable("teamId") Long teamId){
+    @DeleteMapping(value = "/{userId}/teams/{teamId}", produces = "application/json")
+    public String deleteUserFromTeamById(@PathVariable("userId") Long userId, @PathVariable("teamId") Long teamId) {
         return userService.deleteUserFromTeamById(userId, teamId);
     }
 
+    @PutMapping(value = "/{id}", produces = "application/json")
+    public String updateProfile(@PathVariable("id") Long id, @RequestBody User user) {
+        return userService.changeProfile(id, user);
+    }
 
     @PutMapping(value = "/{userId}/teams/{teamId}", produces = "application/json")
-    public String addUserToTeamById(@PathVariable("userId") Long userId, @PathVariable("teamId") Long teamId){
+    public String addUserToTeamById(@PathVariable("userId") Long userId, @PathVariable("teamId") Long teamId) {
         return userService.addUserToTeamById(userId, teamId);
     }
 
     @PutMapping(value = "/{userId}/rooms/{roomId}", produces = "application/json")
-    public String addUserToRoomById(@PathVariable("userId") Long userId, @PathVariable("roomId") Long roomId){
+    public String addUserToRoomById(@PathVariable("userId") Long userId, @PathVariable("roomId") Long roomId) {
         return userService.addUserToRoomById(userId, roomId);
     }
 
-    @PutMapping(value = "/{userId}/rooms/{roomId}", produces = "application/json")
-    public String deleteUserFromRoomById(@PathVariable("userId") Long userId, @PathVariable("roomId") Long roomId){
+    @DeleteMapping(value = "/{userId}/rooms/{roomId}", produces = "application/json")
+    public String deleteUserFromRoomById(@PathVariable("userId") Long userId, @PathVariable("roomId") Long roomId) {
         return userService.deleteUserFromRoomById(userId, roomId);
     }
 
+    @PutMapping(value = "/notification/{notificationId}", produces = "application/json")
+    public String addUserToTeamById(@PathVariable("notificationId") Long notificationId) {
+        return userService.readNotification(notificationId);
+    }
 
 }
-
 
