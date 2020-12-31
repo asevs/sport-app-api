@@ -9,7 +9,9 @@ import pl.lukaszg.sportapp.service.UserService;
 import java.util.List;
 
 
-@RestController("api/users")
+@RestController
+@RequestMapping("api/users")
+
 public class UserController {
 
     @Autowired

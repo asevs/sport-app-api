@@ -13,7 +13,7 @@ public class Chat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "chat_id")
     private long id;
-    @OneToMany(mappedBy = "chat")
+    @OneToMany(mappedBy = "chat", fetch = FetchType.LAZY)
     private List<ChatMessage> messages;
     @OneToOne
     private Room room;

@@ -1,28 +1,29 @@
 package pl.lukaszg.sportapp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Sort;
+import org.springframework.web.bind.annotation.*;
+import pl.lukaszg.sportapp.controller.dto.RoomDto;
+import pl.lukaszg.sportapp.controller.dto.RoomDtoMapper;
 import pl.lukaszg.sportapp.model.Room;
 import pl.lukaszg.sportapp.service.RoomService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-@RestController("api/rooms")
+@RestController()
+@RequestMapping("api/rooms")
 public class RoomController {
     @Autowired
     RoomService roomService;
 
-    @GetMapping("/room/allRooms")
     public List<Room> getAllRooms() {
         return roomService.getAllRooms();
     }
 
 
     // 1. Dodanie roomu
-    @PostMapping(value = "/", produces = "application/json")
+    @PostMapping("/")
     public String addRoom(@RequestBody Room room) {
         return roomService.addRoom(room);
     }
@@ -45,6 +46,13 @@ public class RoomController {
     // 8. filtrowanie roomu
 
     // 9. stronicowanie roomow
+
+    @GetMapping("/list/")
+    public List<RoomDto> getRoomsDto(@RequestParam(required = false) int pageNumber, Sort.Direction sort) {
+
+        return RoomDtoMapper.mapToRoomDtos(roomService.getRooms(pageNumber, sort));
+    }
+
 
     //10.
 

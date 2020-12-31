@@ -1,13 +1,11 @@
 package pl.lukaszg.sportapp.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -29,37 +27,35 @@ public class Room {
     private int scoreTeamFirst;
     @Column(name = "room_score_team_second")
     private int scoreTeamSecond;
-    @ManyToOne(cascade = CascadeType.ALL, targetEntity = Skill.class)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, targetEntity = Skill.class)
     @JoinColumn(name = "room_level_skill")
     private Skill levelSkill;
     @Column(name = "room_created_date")
-    private Date createdDate;
+    private LocalDateTime createdDate;
     @Column(name = "room_event_date")
-    private Date eventDate;
+    private LocalDateTime eventDate;
+    @Column(name = "room_closed_date")
+    private LocalDateTime closedDate;
     @Column(name = "slots")
     private int slots;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonManagedReference(value = "owner-room")
-    @JsonIgnore
     private User ownerUser;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonManagedReference(value = "place-room")
-    @JsonIgnore
     private Place place;
-    @OneToOne(cascade = CascadeType.ALL, targetEntity = Team.class)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, targetEntity = Team.class)
     private Team teamSecond;
-    @OneToOne(cascade = CascadeType.ALL, targetEntity = Team.class)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, targetEntity = Team.class)
     private Team teamFirst;
-    @ToString.Exclude
     @ManyToMany(mappedBy = "rooms", cascade = CascadeType.ALL)
-    @JsonIgnore
     @JsonManagedReference(value = "users-rooms")
     private List<User> users;
-    @OneToOne(mappedBy = "room")
+    @OneToOne(mappedBy = "room", fetch = FetchType.LAZY)
     private Chat chat;
     @OneToOne
     private Stats stats;
-    @OneToMany
+    @ManyToMany(mappedBy = "roomInvites", fetch = FetchType.LAZY)
     private List<User> invitedUsers;
 
 

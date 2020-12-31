@@ -53,7 +53,7 @@ public class User {
     @ManyToMany(cascade = CascadeType.MERGE)
     @JsonBackReference(value = "users-team")
     private List<Team> teams;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JsonBackReference(value = "users-rooms")
     private List<Room> rooms;
     @OneToMany(mappedBy = "ownerUser")
@@ -61,10 +61,10 @@ public class User {
     private List<Room> ownerRooms;
     @OneToOne
     private Stats stats;
-    @OneToOne
-    private User user;
     @OneToMany
     private List<Notification> notifications;
+    @ManyToMany
+    private List<Room> roomInvites;
 
 
 }
