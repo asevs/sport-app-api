@@ -1,7 +1,6 @@
 package pl.lukaszg.sportapp.controller.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Builder;
 import lombok.Getter;
 import pl.lukaszg.sportapp.model.*;

@@ -23,6 +23,10 @@ public class Room {
     private long id;
     @Column(name = "room_price")
     private double price;
+    @Column(name = "room_discipline")
+    private Discipline  discipline;
+    @Column(name = "room_is_priced")
+    private boolean isPriced;
     @Column(name = "room_score_team_first")
     private int scoreTeamFirst;
     @Column(name = "room_score_team_second")

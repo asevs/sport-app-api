@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
-
 
 @Service("roomService")
 @RequiredArgsConstructor
@@ -119,11 +117,17 @@ public class RoomService {
         }
         return "too few players";
     }
-    // 7. sortowanie roomow
 
-    // 8. filtrowanie roomu
-
+    // 7. filtrowanie roomu
+    public List<Room> findByDiscipline(Discipline discipline) {
+        return roomRepository.findByDiscipline(discipline);
+    }
+    // 8. sortowanie roomow
     // 9. stronicowanie roomow
+    public List<Room> getRooms(int pageNumber, Sort.Direction sort) {
+        return roomRepository.findAllRooms(PageRequest.of(pageNumber, PAGE_SIZE, Sort.by(sort, "id")));
+
+    }
 
     //10. sprawdzenie czy ktorys z roomow ma taka sama date eventu
     private int checkRoomsByEventDate(LocalDateTime date, List<Room> rooms) {
@@ -136,24 +140,19 @@ public class RoomService {
         return roomsCount;
     }
 
-
-    // 12. szukanie roomu po id
+    // 11. szukanie roomu po id
     public Room findRoomById(Long id) {
         return roomRepository.findById(id).orElseThrow(() -> new ItemNotFoundException("Could not find room: " + id));
     }
 
-    // 13. stworzenie powiadomienia
+    // 12. stworzenie powiadomienia
     public void createNotification(Long userId, NotificationType notificationType) {
         Notification notification = new Notification();
         notification.setType(notificationType);
         notification.setCreatedDate(LocalDateTime.now());
     }
 
-    public List<Room> getRooms(int pageNumber, Sort.Direction sort) {
-        return roomRepository.findAllRooms(PageRequest.of(pageNumber, PAGE_SIZE, Sort.by(sort, "id")));
-
+    public List<Room> getByPrice(boolean isPriced) {
+        return roomRepository.findByIsPriced(isPriced);
     }
-
-
-
 }

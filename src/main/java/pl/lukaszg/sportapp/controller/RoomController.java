@@ -5,11 +5,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import pl.lukaszg.sportapp.controller.dto.RoomDto;
 import pl.lukaszg.sportapp.controller.dto.RoomDtoMapper;
+import pl.lukaszg.sportapp.model.Discipline;
 import pl.lukaszg.sportapp.model.Room;
 import pl.lukaszg.sportapp.service.RoomService;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController()
 @RequestMapping("api/rooms")
@@ -44,6 +44,21 @@ public class RoomController {
     // 7. sortowanie roomow
 
     // 8. filtrowanie roomu
+    // - po dyscyplinie
+    @GetMapping("/discipline/{discipline}")
+    public List<Room> getByDiscipline(@PathVariable("discipline")Discipline discipline) {
+        return roomService.findByDiscipline(discipline);
+    }
+    // TODO - po dacie
+
+    // TODO - po lokalizacji
+
+    // - po opłacie
+    @GetMapping("/price/{isPriced}")
+    public List<Room> getByPrice(@PathVariable("isPriced") boolean isPriced) {
+        return roomService.getByPrice(isPriced);
+    }
+
 
     // 9. stronicowanie roomow
 
