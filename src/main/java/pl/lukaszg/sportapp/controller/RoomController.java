@@ -46,7 +46,7 @@ public class RoomController {
     // 8. filtrowanie roomu
     // - po dyscyplinie
     @GetMapping("/discipline/{discipline}")
-    public List<Room> getByDiscipline(@PathVariable("discipline")Discipline discipline) {
+    public List<Room> getByDiscipline(@PathVariable("discipline") Discipline discipline) {
         return roomService.findByDiscipline(discipline);
     }
     // TODO - po dacie
@@ -71,4 +71,10 @@ public class RoomController {
 
     //10.
 
+
+    @GetMapping("/filter")
+    public List<Room> getFilterRooms() {
+
+        return roomService.getByFilter();
+    }
 }

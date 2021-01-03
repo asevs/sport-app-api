@@ -85,7 +85,11 @@
             <artifactId>java-jwt</artifactId>
             <version>3.11.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>pl.lukaszg</groupId>
+            <artifactId>sport-app</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
 
 
     </dependencies>

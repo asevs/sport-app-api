@@ -5,10 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import pl.lukaszg.sportapp.controller.dto.RoomDto;
 import pl.lukaszg.sportapp.model.*;
 import pl.lukaszg.sportapp.service.exceptions.ItemNotFoundException;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,6 +32,8 @@ public class RoomService {
     UserService userService;
     @Autowired
     PlaceService placeService;
+    @PersistenceContext
+    EntityManager entityManager;
 
     public List<Room> getAllRooms() {
         return roomRepository.findAll();
@@ -122,6 +127,7 @@ public class RoomService {
     public List<Room> findByDiscipline(Discipline discipline) {
         return roomRepository.findByDiscipline(discipline);
     }
+
     // 8. sortowanie roomow
     // 9. stronicowanie roomow
     public List<Room> getRooms(int pageNumber, Sort.Direction sort) {
@@ -155,4 +161,22 @@ public class RoomService {
     public List<Room> getByPrice(boolean isPriced) {
         return roomRepository.findByIsPriced(isPriced);
     }
+
+    public List<Room> getByFilter() {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Room> query = cb.createQuery(Room.class);
+        Root<Room> r = query.from(Room.class);
+        Predicate criteria = cb.conjunction();
+
+        ParameterExpression<Boolean> isPriced = cb.parameter(Boolean.class, "isPriced");
+        criteria = cb.and(criteria, cb.equal(r.get("isPriced"), isPriced));
+
+        query.select(r)
+                .where(criteria);
+
+        TypedQuery<Room> tq = entityManager.createQuery(query);
+        tq.setParameter("isPriced", false);
+        return tq.getResultList();
+    }
+
 }
