@@ -2,8 +2,7 @@ package pl.lukaszg.sportapp.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import pl.lukaszg.sportapp.model.*;
 import pl.lukaszg.sportapp.service.exceptions.ItemNotFoundException;
@@ -162,21 +161,27 @@ public class RoomService {
         return roomRepository.findByIsPriced(isPriced);
     }
 
-    public List<Room> getByFilter() {
+    public Page<Room> getByFilter(int pageNumber, Sort.Direction sort, Discipline discipline) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Room> query = cb.createQuery(Room.class);
         Root<Room> r = query.from(Room.class);
         Predicate criteria = cb.conjunction();
 
         ParameterExpression<Boolean> isPriced = cb.parameter(Boolean.class, "isPriced");
+        ParameterExpression<Discipline> disciplin = cb.parameter(Discipline.class, "discipline");
         criteria = cb.and(criteria, cb.equal(r.get("isPriced"), isPriced));
-
+        if (discipline != null) {
+            cb.and(criteria, cb.equal(r.get("discipline"), disciplin));
+        }
         query.select(r)
                 .where(criteria);
 
         TypedQuery<Room> tq = entityManager.createQuery(query);
         tq.setParameter("isPriced", false);
-        return tq.getResultList();
+
+        Pageable page = PageRequest.of(pageNumber, 20, sort, "id");
+        Page<Room> result = new PageImpl<Room>(tq.getResultList(), page, 20);
+        return result;
     }
 
 }

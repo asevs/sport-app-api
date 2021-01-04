@@ -1,6 +1,8 @@
 package pl.lukaszg.sportapp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import pl.lukaszg.sportapp.controller.dto.RoomDto;
@@ -73,8 +75,8 @@ public class RoomController {
 
 
     @GetMapping("/filter")
-    public List<Room> getFilterRooms() {
+    public Page<Room> getFilterRooms(@RequestParam(required = false) int pageNumber, Sort.Direction sort, Discipline discipline) {
 
-        return roomService.getByFilter();
+        return roomService.getByFilter(pageNumber, sort, discipline);
     }
 }
