@@ -57,7 +57,7 @@ public class RoomService {
     }
 
     // 2. edycja roomu
-    public String changeRoom(Long ownerId, Room room) {
+    public String editRoom(Long ownerId, Room room) {
         if (ownerId == room.getOwnerUser().getId() && findRoomById(room.getId()) != null) {
             roomRepository.save(room);
             return "updated";

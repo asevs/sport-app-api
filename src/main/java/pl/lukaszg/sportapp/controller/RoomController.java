@@ -2,7 +2,6 @@ package pl.lukaszg.sportapp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import pl.lukaszg.sportapp.controller.dto.RoomDto;
@@ -32,9 +31,16 @@ public class RoomController {
 
 
     // 2. edycja roomu
+    @PutMapping("/")
+    public String editRoom(@RequestBody Room room) {
+        return roomService.addRoom(room);
+    }
 
     // 3. wysłanie zaproszenia
-
+    @GetMapping("/{id}/user/{id}")
+    public String sendInvite(@RequestParam(required = false) Long userId, Long roomId) {
+        return roomService.sendInvite(userId, roomId);
+    }
     // 4. anulowanie zaproszenia
 
     // 4. usunięcie kogoś z roomu
