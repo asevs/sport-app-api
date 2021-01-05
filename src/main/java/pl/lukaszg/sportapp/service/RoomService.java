@@ -161,24 +161,23 @@ public class RoomService {
         return roomRepository.findByIsPriced(isPriced);
     }
 
-    public Page<Room> getByFilter(int pageNumber, Sort.Direction sort, Discipline discipline) {
+    public Page<Room> getByFilter(int pageNumber, Sort.Direction sort, Discipline discipline, Boolean isPriced) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Room> query = cb.createQuery(Room.class);
         Root<Room> r = query.from(Room.class);
         Predicate criteria = cb.conjunction();
-
-        ParameterExpression<Boolean> isPriced = cb.parameter(Boolean.class, "isPriced");
-        ParameterExpression<Discipline> disciplin = cb.parameter(Discipline.class, "discipline");
-        criteria = cb.and(criteria, cb.equal(r.get("isPriced"), isPriced));
+        if (isPriced != null) {
+            ParameterExpression<Boolean> paramIsPriced = cb.parameter(Boolean.class, "isPriced");
+            criteria = cb.and(criteria, cb.equal(r.get("isPriced"), paramIsPriced));
+        }
         if (discipline != null) {
-            cb.and(criteria, cb.equal(r.get("discipline"), disciplin));
+            ParameterExpression<Discipline> paramDiscipline = cb.parameter(Discipline.class, "discipline");
+            cb.and(criteria, cb.equal(r.get("discipline"), paramDiscipline));
         }
         query.select(r)
                 .where(criteria);
 
         TypedQuery<Room> tq = entityManager.createQuery(query);
-        tq.setParameter("isPriced", false);
-
         Pageable page = PageRequest.of(pageNumber, 20, sort, "id");
         Page<Room> result = new PageImpl<Room>(tq.getResultList(), page, 20);
         return result;

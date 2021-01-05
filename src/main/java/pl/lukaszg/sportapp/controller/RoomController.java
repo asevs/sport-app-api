@@ -75,8 +75,8 @@ public class RoomController {
 
 
     @GetMapping("/filter")
-    public Page<Room> getFilterRooms(@RequestParam(required = false) int pageNumber, Sort.Direction sort, Discipline discipline) {
+    public Page<Room> getFilterRooms(@RequestParam(required = false) int pageNumber, Sort.Direction sort, Discipline discipline, Boolean isPriced) {
 
-        return roomService.getByFilter(pageNumber, sort, discipline);
+        return roomService.getByFilter(pageNumber, sort, discipline, isPriced);
     }
 }
