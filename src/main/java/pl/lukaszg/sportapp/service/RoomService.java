@@ -12,6 +12,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -98,8 +99,8 @@ public class RoomService {
     }
 
     // 5. zamknięcie roomu ( zakonczenie meczu, wpisanie wynikow i statystyk)
-    public String closeRoom(Long userId, Room room) {
-        User owner = userService.findUserById(userId);
+    public String closeRoom(Long ownerId, Room room) {
+        User owner = userService.findUserById(ownerId);
         Room editRoom = findRoomById(room.getId());
         editRoom.setRoomStatus(CLOSED);
         editRoom.setClosedDate(LocalDateTime.now());
@@ -161,7 +162,7 @@ public class RoomService {
         return roomRepository.findByIsPriced(isPriced);
     }
 
-    public Page<Room> getByFilter(int pageNumber, Sort.Direction sort, Discipline discipline, Boolean isPriced) {
+    public Page<Room> getByFilter(int pageNumber, Sort.Direction sort, Discipline discipline, Boolean isPriced, LocalDateTime dateFrom, LocalDateTime dateTo) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Room> query = cb.createQuery(Room.class);
         Root<Room> r = query.from(Room.class);
@@ -174,6 +175,11 @@ public class RoomService {
             ParameterExpression<Discipline> paramDiscipline = cb.parameter(Discipline.class, "discipline");
             cb.and(criteria, cb.equal(r.get("discipline"), paramDiscipline));
         }
+        if (dateFrom != null) {
+            ParameterExpression<LocalDateTime> paramDateFrom = cb.parameter(LocalDateTime.class, "dateFrom");
+            cb.and(criteria, cb.greaterThanOrEqualTo(r.get("eventDate"), paramDateFrom));
+        }
+
         query.select(r)
                 .where(criteria);
 
