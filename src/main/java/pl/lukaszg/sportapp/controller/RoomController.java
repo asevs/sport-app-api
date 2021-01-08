@@ -82,8 +82,9 @@ public class RoomController {
                                      Discipline discipline,
                                      Boolean isPriced,
                                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateFrom,
-                                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTo) {
-        return roomService.getByFilter(pageNumber, sort, discipline, isPriced, dateFrom, dateTo);
+                                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTo,
+                                     double lat, double lon, int radius) {
+        return roomService.getByFilter(pageNumber, sort, discipline, isPriced, dateFrom, dateTo, lat, lon, radius );
     }
 
     @GetMapping("/dto/")

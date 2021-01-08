@@ -1,5 +1,6 @@
 package pl.lukaszg.sportapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -47,6 +48,7 @@ public class Room {
     private User ownerUser;
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonManagedReference(value = "place-room")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Place place;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, targetEntity = Team.class)
     private Team teamSecond;

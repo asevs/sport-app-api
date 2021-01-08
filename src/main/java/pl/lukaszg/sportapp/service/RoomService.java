@@ -12,7 +12,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -162,7 +161,9 @@ public class RoomService {
         return roomRepository.findByIsPriced(isPriced);
     }
 
-    public Page<Room> getByFilter(int pageNumber, Sort.Direction sort, Discipline discipline, Boolean isPriced, LocalDateTime dateFrom, LocalDateTime dateTo) {
+    public Page<Room> getByFilter(int pageNumber, Sort.Direction sort, Discipline discipline, Boolean isPriced, LocalDateTime dateFrom, LocalDateTime dateTo, Double lat, Double lon, int radius) {
+
+
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Room> query = cb.createQuery(Room.class);
         Root<Room> r = query.from(Room.class);
@@ -173,20 +174,36 @@ public class RoomService {
         }
         if (discipline != null) {
             ParameterExpression<Discipline> paramDiscipline = cb.parameter(Discipline.class, "discipline");
-            cb.and(criteria, cb.equal(r.get("discipline"), paramDiscipline));
+            criteria = cb.and(criteria, cb.equal(r.get("discipline"), paramDiscipline));
         }
         if (dateFrom != null) {
             ParameterExpression<LocalDateTime> paramDateFrom = cb.parameter(LocalDateTime.class, "dateFrom");
-            cb.and(criteria, cb.greaterThanOrEqualTo(r.get("eventDate"), paramDateFrom));
+            ParameterExpression<LocalDateTime> paramdateTo = cb.parameter(LocalDateTime.class, "dateTo");
+            criteria = cb.and(criteria, cb.between(r.get("eventDate"), paramDateFrom, paramdateTo));
         }
+        if (radius != 0) {
+            double km = 0.009,
+                    minLat = lat - radius * km,
+                    maxLat = lat + radius * km,
+                    minLon = lon - radius * km,
+                    maxLon = lon + radius * km;
 
+            criteria = cb.and(criteria, cb.between(r.get("place").get("lon"), minLon, maxLon));
+            criteria = cb.and(criteria, cb.between(r.get("place").get("lat"), minLat, maxLat));
+        }
         query.select(r)
                 .where(criteria);
 
         TypedQuery<Room> tq = entityManager.createQuery(query);
+        if (discipline != null) tq.setParameter("discipline", discipline);
+        if (isPriced != null) tq.setParameter("isPriced", isPriced);
+        if (dateFrom != null) {
+            tq.setParameter("dateFrom", dateFrom);
+            tq.setParameter("dateTo", dateTo);
+        }
+
         Pageable page = PageRequest.of(pageNumber, 20, sort, "id");
         Page<Room> result = new PageImpl<Room>(tq.getResultList(), page, 20);
         return result;
     }
-
 }
