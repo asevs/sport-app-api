@@ -14,7 +14,7 @@ import pl.lukaszg.sportapp.service.RoomService;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@RestController()
+@RestController
 @RequestMapping("api/rooms")
 public class RoomController {
     @Autowired

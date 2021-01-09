@@ -11,7 +11,7 @@ public class PlaceService {
     @Autowired
     PlaceRepository placeRepository;
 
-    // 1. szukanie roomu po id
+    // 1. szukanie place po id
     public Place findPlaceById(Long id) {
         return placeRepository.findById(id).orElseThrow(() -> new ItemNotFoundException("Could not find place: " + id));
     }

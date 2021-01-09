@@ -91,11 +91,11 @@ public class UserService {
 
     // dodanie usera do team.
     public String addUserToTeamById(Long userId, Long teamId) {
-        Optional<Team> team = teamService.findTeamById(teamId);
+        Team team = teamService.findTeamById(teamId);
         User user = findUserById(userId);
-        if (team.get().getSlots() > team.get().getUsers().size()) {
+        if (team.getSlots() > team.getUsers().size()) {
             List<Team> teams = user.getTeams();
-            teams.add(team.get());
+            teams.add(team);
             user.setTeams(teams);
             userRepository.save(user);
             return "added user";
@@ -105,10 +105,10 @@ public class UserService {
 
     //usunięcie usera z team
     public String deleteUserFromTeamById(Long userId, Long teamId) {
-        Optional<Team> team = teamService.findTeamById(teamId);
+        Team team = teamService.findTeamById(teamId);
         User user = findUserById(userId);
         List<Team> teams = user.getTeams();
-        teams.remove(team.get());
+        teams.remove(team);
         user.setTeams(teams);
         userRepository.save(user);
         return "deleted user";
