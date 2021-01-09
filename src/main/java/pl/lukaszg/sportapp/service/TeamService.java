@@ -14,6 +14,6 @@ public class TeamService {
 
     // 1. szukanie teamu po id
     public Team findTeamById(Long id) {
-        return teamRepository.findById(id).orElseThrow(() -> new ItemNotFoundException("Could not find place: " + id));
+        return teamRepository.findById(id).orElseThrow(() -> new ItemNotFoundException("Could not find team: " + id));
     }
 }
