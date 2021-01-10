@@ -33,6 +33,8 @@ public class Team {
     private int assists;
     @Column(name = "team_slots")
     private int slots;
+    @OneToOne
+    private Stats stats;
     @ToString.Exclude
     @JsonIgnore
     @ManyToMany(mappedBy = "teams", cascade = CascadeType.ALL)
@@ -44,8 +46,10 @@ public class Team {
     @OneToMany(mappedBy = "lost")
     @JsonBackReference(value = "team-lost")
     private List<Room> lost;
-    @ManyToMany (fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JsonBackReference(value = "team-draw")
-    private List <Room> draws;
+    private List<Room> draws;
+    private Discipline discipline;
+    private List<Competition> competitions;
 
 }

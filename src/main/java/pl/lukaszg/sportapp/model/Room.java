@@ -46,6 +46,8 @@ public class Room {
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonManagedReference(value = "owner-room")
     private User ownerUser;
+    @OneToOne
+    private User capitanSecondTeam;
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonManagedReference(value = "place-room")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})

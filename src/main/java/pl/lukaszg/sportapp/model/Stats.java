@@ -30,6 +30,14 @@ public class Stats {
     @OneToMany
     @MapKeyJoinColumn(name = "user_id")
     private Map<Integer, User> redCards;
-
-
+    @Column(name = "match_win")
+    private int matchWin;
+    @Column(name = "match_lost")
+    private int matchLost;
+    @Column(name = "match_draw")
+    private int matchDraw;
+    @Column(name = "cup_win")
+    private int cupWin;
+    @Column(name = "league_win")
+    private int leagueWin;
 }
