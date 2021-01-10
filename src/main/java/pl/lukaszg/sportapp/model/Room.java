@@ -63,6 +63,16 @@ public class Room {
     private Stats stats;
     @ManyToMany(mappedBy = "roomInvites", fetch = FetchType.LAZY)
     private List<User> invitedUsers;
+    @ManyToOne (fetch = FetchType.LAZY)
+    @JsonManagedReference(value="team-winner")
+    private Team winner;
+    @ManyToOne (fetch = FetchType.LAZY)
+    @JsonManagedReference(value="team-lost")
+    private Team lost;
+    @ManyToMany (fetch = FetchType.LAZY)
+    @JsonManagedReference(value="team-draw")
+    private List<Team> draws;
+
 
 
 }

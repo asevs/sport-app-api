@@ -1,5 +1,6 @@
 package pl.lukaszg.sportapp.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
@@ -37,5 +38,14 @@ public class Team {
     @ManyToMany(mappedBy = "teams", cascade = CascadeType.ALL)
     @JsonManagedReference(value = "users-team")
     private List<User> users;
+    @OneToMany(mappedBy = "winner")
+    @JsonBackReference(value = "team-winner")
+    private List<Room> winners;
+    @OneToMany(mappedBy = "lost")
+    @JsonBackReference(value = "team-lost")
+    private List<Room> lost;
+    @ManyToMany (fetch = FetchType.LAZY)
+    @JsonBackReference(value = "team-draw")
+    private List <Room> draws;
 
 }
