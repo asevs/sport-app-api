@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -16,6 +18,11 @@ public class Competition {
     @Column(name = "competition_id")
     private Long id;
     @Column(name = "competition_name")
-    @NotNull
     private String name;
+    @ManyToMany
+    private List<Team> teams;
+    @Column(name = "competition_event_date")
+    LocalDateTime eventDate;
+
+
 }

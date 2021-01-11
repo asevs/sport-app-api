@@ -20,6 +20,7 @@ public class RoomController {
     @Autowired
     RoomService roomService;
 
+    @GetMapping("/")
     public List<Room> getAllRooms() {
         return roomService.getAllRooms();
     }

@@ -53,8 +53,10 @@ public class Room {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Place place;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, targetEntity = Team.class)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Team teamSecond;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, targetEntity = Team.class)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Team teamFirst;
     @ManyToMany(mappedBy = "rooms", cascade = CascadeType.ALL)
     @JsonManagedReference(value = "users-rooms")

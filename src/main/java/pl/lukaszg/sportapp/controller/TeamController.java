@@ -2,9 +2,7 @@ package pl.lukaszg.sportapp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.lukaszg.sportapp.controller.dto.TeamDto;
 import pl.lukaszg.sportapp.controller.dto.TeamDtoMapper;
 import pl.lukaszg.sportapp.model.Team;
@@ -21,11 +19,17 @@ public class TeamController {
     TeamService teamService;
 
     //1 szukanie teamu po id
-    public Team findTeamById(Long id) {
+    @GetMapping("/team/{id}")
+    public Team findTeamById(@PathVariable("id") Long id) {
         return teamService.findTeamById(id);
     }
 
+    @GetMapping("/team/{id}/dto")
+    public TeamDto getTeamDto(@PathVariable("id")Long id){
+        return TeamDtoMapper.mapToTeamDtos(teamService.findTeamByIdDto(id));
+    }
     //team z danymi: nazwa,dyscyplina,statystyki,zawodnicy, ostatnie 3 mecez, ostatnie 3 udziały w turniehach/ligach
+    @GetMapping("/dto/")
     public List<TeamDto> getTeamsDtos(@RequestParam(required = false) int pageNumber, Sort.Direction sort) {
         return TeamDtoMapper.mapToTeamDtos(teamService.getTeams(pageNumber, sort));
 

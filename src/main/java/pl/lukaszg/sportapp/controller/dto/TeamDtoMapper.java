@@ -15,14 +15,11 @@ public class TeamDtoMapper {
                 .collect(Collectors.toList());
     }
 
-    private static TeamDto mapToTeamDtos(Team team) {
+    public static TeamDto mapToTeamDtos(Team team) {
         return TeamDto.builder()
                 .id(team.getId())
                 .discipline(team.getDiscipline())
                 .owner(team.getOwner())
-                .stats(team.getStats())
-                .rooms(team.getWinners())
-                .competitions(team.getCompetitions())
                 .build();
     }
 }
