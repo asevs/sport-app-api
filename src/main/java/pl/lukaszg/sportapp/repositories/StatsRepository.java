@@ -1,0 +1,7 @@
+package pl.lukaszg.sportapp.repositories;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import pl.lukaszg.sportapp.model.Stats;
+
+public interface StatsRepository extends JpaRepository<Stats, Long> {
+}
