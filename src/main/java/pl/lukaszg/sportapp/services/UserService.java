@@ -3,7 +3,10 @@ package pl.lukaszg.sportapp.services;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.lukaszg.sportapp.configurations.LoginCredentials;
-import pl.lukaszg.sportapp.model.*;
+import pl.lukaszg.sportapp.model.Notification;
+import pl.lukaszg.sportapp.model.Team;
+import pl.lukaszg.sportapp.model.User;
+import pl.lukaszg.sportapp.model.UserLoginType;
 import pl.lukaszg.sportapp.repositories.NotificationRepository;
 import pl.lukaszg.sportapp.repositories.UserRepository;
 import pl.lukaszg.sportapp.services.exceptions.ItemNotFoundException;
@@ -21,17 +24,15 @@ public class UserService {
 
     private final TeamService teamService;
 
-    private final RoomService roomService;
     BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
 
     public UserService(UserRepository userRepository,
                        NotificationRepository notificationRepository,
-                       TeamService teamService,
-                       RoomService roomService) {
+                       TeamService teamService
+                       ) {
         this.userRepository = userRepository;
         this.notificationRepository = notificationRepository;
         this.teamService = teamService;
-        this.roomService = roomService;
     }
 
     public List<User> findAll() {
@@ -85,19 +86,6 @@ public class UserService {
         } else return "id or user is incorrect";
     }
 
-    // dodanie usera do room
-    public String addUserToRoomById(Long userId, Long roomId) {
-        Room room = roomService.findRoomById(roomId);
-        User user = findUserById(userId);
-
-        if (room.getUsers().size() < room.getSlots()) {
-            List<Room> rooms = user.getRooms();
-            rooms.add(room);
-            user.setRooms(rooms);
-            userRepository.save(user);
-            return "added user";
-        } else return "max users";
-    }
 
     // dodanie usera do team.
     public String addUserToTeamById(Long userId, Long teamId) {
@@ -124,16 +112,6 @@ public class UserService {
         return "deleted user";
     }
 
-    //usunięcie usera z room
-    public String deleteUserFromRoomById(Long userId, Long roomId) {
-        Room room = roomService.findRoomById(roomId);
-        User user = findUserById(userId);
-        List<Room> rooms = user.getRooms();
-        rooms.remove(room);
-        user.setRooms(rooms);
-        userRepository.save(user);
-        return "deleted user";
-    }
 
     // Odczytanie powiadomienia
 

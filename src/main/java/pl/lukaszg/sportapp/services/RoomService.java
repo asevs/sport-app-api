@@ -125,6 +125,31 @@ public class RoomService {
         return "too few players";
     }
 
+    // dodanie usera do room
+    public String addUserToRoomById(Long userId, Long roomId) {
+        Room room = findRoomById(roomId);
+        User user = userService.findUserById(userId);
+
+        if (room.getUsers().size() < room.getSlots()) {
+            List<Room> rooms = user.getRooms();
+            rooms.add(room);
+            user.setRooms(rooms);
+            userService.changeProfile(user.getId(), user);
+            return "added user";
+        } else return "max users";
+    }
+
+    //usunięcie usera z room
+    public String deleteUserFromRoomById(Long userId, Long roomId) {
+        Room room = findRoomById(roomId);
+        User user = userService.findUserById(userId);
+        List<Room> rooms = user.getRooms();
+        rooms.remove(room);
+        user.setRooms(rooms);
+        userService.changeProfile(user.getId(), user);
+        return "deleted user";
+    }
+
     // 7. filtrowanie roomu
     public List<Room> findByDiscipline(Discipline discipline) {
         return roomRepository.findByDiscipline(discipline);

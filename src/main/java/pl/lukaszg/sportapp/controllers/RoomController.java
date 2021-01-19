@@ -98,4 +98,13 @@ public class RoomController {
 
     //10.
 
+    @PutMapping(value = "/{userId}/rooms/{roomId}", produces = "application/json")
+    public String addUserToRoomById(@PathVariable("userId") Long userId, @PathVariable("roomId") Long roomId) {
+        return roomService.addUserToRoomById(userId, roomId);
+    }
+
+    @DeleteMapping(value = "/{userId}/rooms/{roomId}", produces = "application/json")
+    public String deleteUserFromRoomById(@PathVariable("userId") Long userId, @PathVariable("roomId") Long roomId) {
+        return roomService.deleteUserFromRoomById(userId, roomId);
+    }
 }

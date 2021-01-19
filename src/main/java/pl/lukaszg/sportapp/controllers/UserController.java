@@ -55,16 +55,6 @@ public class UserController {
         return userService.addUserToTeamById(userId, teamId);
     }
 
-    @PutMapping(value = "/{userId}/rooms/{roomId}", produces = "application/json")
-    public String addUserToRoomById(@PathVariable("userId") Long userId, @PathVariable("roomId") Long roomId) {
-        return userService.addUserToRoomById(userId, roomId);
-    }
-
-    @DeleteMapping(value = "/{userId}/rooms/{roomId}", produces = "application/json")
-    public String deleteUserFromRoomById(@PathVariable("userId") Long userId, @PathVariable("roomId") Long roomId) {
-        return userService.deleteUserFromRoomById(userId, roomId);
-    }
-
     @PutMapping(value = "/notification/{notificationId}", produces = "application/json")
     public String addUserToTeamById(@PathVariable("notificationId") Long notificationId) {
         return userService.readNotification(notificationId);
