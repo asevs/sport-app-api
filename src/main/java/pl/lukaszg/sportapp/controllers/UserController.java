@@ -3,10 +3,8 @@ package pl.lukaszg.sportapp.controllers;
 import org.springframework.web.bind.annotation.*;
 import pl.lukaszg.sportapp.configurations.LoginCredentials;
 import pl.lukaszg.sportapp.model.User;
-import pl.lukaszg.sportapp.services.MailService;
 import pl.lukaszg.sportapp.services.UserService;
 
-import javax.mail.MessagingException;
 import java.util.List;
 
 
@@ -17,16 +15,13 @@ public class UserController {
 
 
     private final UserService userService;
-    private final MailService mailService;
 
-    public UserController(UserService userService, MailService mailService) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.mailService = mailService;
     }
 
     @GetMapping("/")
-    public List<User> getAllUsers() throws MessagingException {
-        mailService.sendMail("gorcek45@gmail.com","gorcek45@gmail.com","gorcek45@gmail.com",false);
+    public List<User> getAllUsers() {
         return userService.findAll();
     }
 

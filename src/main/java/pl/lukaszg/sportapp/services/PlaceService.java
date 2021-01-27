@@ -17,4 +17,7 @@ public class PlaceService {
     public Place findPlaceById(Long id) {
         return placeRepository.findById(id).orElseThrow(() -> new ItemNotFoundException("Could not find place: " + id));
     }
+
+    public
+
 }
