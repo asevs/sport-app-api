@@ -46,13 +46,17 @@ public class Room {
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonManagedReference(value = "owner-room")
     private User ownerUser;
+    @OneToOne
+    private User capitanSecondTeam;
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonManagedReference(value = "place-room")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Place place;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, targetEntity = Team.class)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Team teamSecond;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, targetEntity = Team.class)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Team teamFirst;
     @ManyToMany(mappedBy = "rooms", cascade = CascadeType.ALL)
     @JsonManagedReference(value = "users-rooms")
@@ -63,6 +67,16 @@ public class Room {
     private Stats stats;
     @ManyToMany(mappedBy = "roomInvites", fetch = FetchType.LAZY)
     private List<User> invitedUsers;
+    @ManyToOne (fetch = FetchType.LAZY)
+    @JsonManagedReference(value="team-winner")
+    private Team winner;
+    @ManyToOne (fetch = FetchType.LAZY)
+    @JsonManagedReference(value="team-lost")
+    private Team lost;
+    @ManyToMany (fetch = FetchType.LAZY)
+    @JsonManagedReference(value="team-draw")
+    private List<Team> draws;
+
 
 
 }

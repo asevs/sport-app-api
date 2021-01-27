@@ -65,6 +65,8 @@ public class User {
     private List<Notification> notifications;
     @ManyToMany
     private List<Room> roomInvites;
+    @Column(name = "isSendMail")
+    private boolean isSendMail;
 
 
 }
