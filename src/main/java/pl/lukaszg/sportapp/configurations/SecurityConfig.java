@@ -47,8 +47,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-        http
+        http .cors()
+                .and()
+                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/swagger-ui/**").permitAll()
                 .antMatchers("/swagger-resources/**").permitAll()
@@ -56,7 +57,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/room/**").permitAll()
                 .antMatchers("/registers/**").permitAll()
                 .antMatchers("/users").permitAll()
-               // .anyRequest().authenticated()
+                .antMatchers("/login").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()

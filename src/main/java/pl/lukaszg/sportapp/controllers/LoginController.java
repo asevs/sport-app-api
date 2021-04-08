@@ -1,13 +1,12 @@
 package pl.lukaszg.sportapp.controllers;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.lukaszg.sportapp.configurations.LoginCredentials;
 import pl.lukaszg.sportapp.model.User;
 import pl.lukaszg.sportapp.services.UserService;
 
 @RestController
+@CrossOrigin
 public class LoginController {
 
     private final UserService userService;
