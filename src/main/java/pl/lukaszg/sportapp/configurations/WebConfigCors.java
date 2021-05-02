@@ -17,10 +17,9 @@ public class WebConfigCors implements WebMvcConfigurer {
     CorsConfigurationSource corsConfigurationSource()
     {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*", "http://localhost:3000/rsooms"));  //TODO: poprawić dostęp po zmianie domeny
+        configuration.applyPermitDefaultValues().addExposedHeader("Authorization");
+        configuration.setAllowedOrigins(Arrays.asList("*"));  //TODO: poprawić dostęp po zmianie domeny
         configuration.setAllowedMethods(Arrays.asList("GET","POST"));
-        configuration.addAllowedHeader("Authorization");
-        configuration.addExposedHeader("Authorization");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

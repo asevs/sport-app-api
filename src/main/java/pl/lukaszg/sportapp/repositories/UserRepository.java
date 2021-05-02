@@ -8,7 +8,7 @@ import pl.lukaszg.sportapp.model.User;
 import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    boolean findByUsername(String username);
+    User findByUsername(String username);
 
     @Query("Select u From User u")
     List<User> findAll();

@@ -44,7 +44,7 @@ public class UserService {
 
     //Sprawdzamy czy user znajduje się w bazie. Jeżeli nie to tworzymy usera i zwracamy done. Jeżeli istnieje to zwracamy busy
     public String registerUser(User user) {
-        if (userRepository.findByUsername(user.getUsername())) {
+        if (userRepository.findByUsername(user.getUsername()) == user) {
             return "username is busy";
         } else {
             String password = user.getPassword();
@@ -59,6 +59,9 @@ public class UserService {
     // szukanie usera by id
     public User findUserById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new ItemNotFoundException("Could not find user: " + id));
+    }
+    public User findUserByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
     // usuniecie usera by id
